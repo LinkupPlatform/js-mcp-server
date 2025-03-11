@@ -1,0 +1,163 @@
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { LinkupClient } from 'linkup-sdk';
+import { main, parseArgs, displayHelp } from '../index';
+
+describe('parseArgs', () => {
+  describe('success cases', () => {
+    const apiKey = '77086fdf-94e4-43f3-b5bf-9246b584a50e';
+    const baseUrl = 'https://fake-api.linkup.so/v1';
+
+    it('should parse all options correctly', () => {
+      const args = [`--api-key=${apiKey}`, `--base-url=${baseUrl}`];
+      const options = parseArgs(args);
+
+      expect(options).toEqual({
+        apiKey: apiKey,
+        baseUrl: baseUrl,
+      });
+      expect(true).toBe(true);
+    });
+
+    it('if api key is set in env variable, should parse base url argument correctly', () => {
+      process.env.LINKUP_API_KEY = apiKey;
+
+      const args = [`--base-url=${baseUrl}`];
+      const options = parseArgs(args);
+
+      expect(options).toEqual({
+        apiKey: apiKey,
+        baseUrl: baseUrl,
+      });
+
+      delete process.env.LINKUP_API_KEY;
+    });
+
+    it('if api key set in env variable but also passed into args, should prefer args key', () => {
+      process.env.LINKUP_API_KEY = apiKey;
+
+      const args = [`--api-key=${apiKey}`, `--base-url=${baseUrl}`];
+      const options = parseArgs(args);
+
+      expect(options).toEqual({
+        apiKey: apiKey,
+        baseUrl: baseUrl,
+      });
+
+      delete process.env.LINKUP_API_KEY;
+    });
+
+    it('ignore all arguments not prefixed with --', () => {
+      const args = [
+        `--api-key=${apiKey}`,
+        `--base-url=${baseUrl}`,
+        'useless-field=useless-value',
+      ];
+      const options = parseArgs(args);
+
+      expect(options).toEqual({
+        apiKey: apiKey,
+        baseUrl: baseUrl,
+      });
+    });
+  });
+
+  describe('error cases', () => {
+    const apiKey = 'wrong-api-key';
+    const baseUrl = 'wrong-url';
+
+    beforeEach(() => {
+      delete process.env.LINKUP_API_KEY;
+    });
+
+    it('should throw an error if api-key is not an uuid', () => {
+      const args = [`--api-key=${apiKey}`, `--base-url=${baseUrl}`];
+
+      expect(() => parseArgs(args)).toThrow('API key must be an uuid.');
+    });
+    it('should throw an error if api-key is not provided', () => {
+      const args = ['--base-url=https://api.linkup.so/v1'];
+
+      expect(() => parseArgs(args)).toThrow(
+        'Linkup API key not provided. Please either pass it as an argument --api-key=$KEY or set the LINKUP_API_KEY environment variable.',
+      );
+    });
+    it('should throw an error if base-url is not an url', () => {
+      const args = [
+        '--api-key=242e0933-214d-4791-ac87-43bc99f9cc76',
+        `--base-url=${baseUrl}`,
+      ];
+
+      expect(() => parseArgs(args)).toThrow('Base url must be an url.');
+    });
+    it('should throw an error if an invalid argument is provided', () => {
+      const args = [
+        '--invalid-arg=value',
+        `--api-key=${apiKey}`,
+        `--base-url=${baseUrl}`,
+      ];
+      expect(() => parseArgs(args)).toThrow(
+        'Invalid argument: invalid-arg. Accepted arguments are: api-key, base-url',
+      );
+    });
+  });
+});
+
+jest.mock('linkup-sdk');
+jest.mock('@modelcontextprotocol/sdk/server/stdio.js');
+
+describe('main function', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should initialize the server', async () => {
+    process.argv = [
+      'node',
+      'index.ts',
+      '--api-key=8fe8b666-8dfc-4b5a-9026-48fcdace6cef',
+      '--base-url=https://api.linkup.so/v1',
+    ];
+
+    await main();
+
+    expect(LinkupClient).toHaveBeenCalledWith({
+      apiKey: '8fe8b666-8dfc-4b5a-9026-48fcdace6cef',
+      baseUrl: 'https://api.linkup.so/v1',
+    });
+
+    expect(StdioServerTransport).toHaveBeenCalled();
+  });
+});
+
+describe('displayHelp', () => {
+  let logSpy: jest.SpyInstance;
+  let exitSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit() was called');
+    });
+  });
+
+  afterEach(() => {
+    logSpy.mockRestore();
+    exitSpy.mockRestore();
+  });
+
+  it('should display help text and exit if --help is passed', () => {
+    expect(() => displayHelp(['--help'])).toThrow('process.exit() was called');
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Usage: npx -y linkup-mcp [options]'),
+    );
+    expect(exitSpy).toHaveBeenCalledWith(0);
+  });
+
+  it('should display help text and exit if -h is passed', () => {
+    expect(() => displayHelp(['-h'])).toThrow('process.exit() was called');
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Usage: npx -y linkup-mcp [options]'),
+    );
+    expect(exitSpy).toHaveBeenCalledWith(0);
+  });
+});
