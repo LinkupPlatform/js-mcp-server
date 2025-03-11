@@ -57,13 +57,14 @@ export const parseArgs = (args: string[]): Args => {
 const instantiateTool = (server: McpServer, linkupClient: LinkupClient) => {
   server.tool(
     'search-web',
-    'Perform a web search query using Linkup. This tool is helpful for finding information on the web.',
+    `A team member that will search the internet to answer your question. Ask him for all your questions that require browsing the web. 
+    Note that this agent is using a powerful language model and it can do the search and analyse the results. 
+    You should ask question in a way to let the language model to perform the best, i.e. provide as much context as possible and ask in a clear way.
+    Provide him as much context as possible, in particular if you need to search on a specific timeframe!
+    And don't hesitate to provide him with a complex search task, like finding a difference between two webpages.
+    Your request must be a real sentence, not a google search! Like "Find me this information (...)" rather than a few keywords.`,
     {
-      query: z
-        .string()
-        .describe(
-          'The query to search the web with. This should be a question, no need to write in keywords.',
-        ),
+      query: z.string().describe('The search query to perform.'),
     },
     async ({ query }) => {
       const result = await linkupClient.search({
