@@ -8,7 +8,7 @@ describe('parseArgs', () => {
     const baseUrl = 'https://fake-api.linkup.so/v1';
 
     it('should parse all options correctly', () => {
-      const args = [`--api-key=${apiKey}`, `--base-url=${baseUrl}`];
+      const args = { apiKey, baseUrl };
       const options = parseArgs(args);
 
       expect(options).toEqual({
@@ -21,7 +21,7 @@ describe('parseArgs', () => {
     it('if api key is set in env variable, should parse base url argument correctly', () => {
       process.env.LINKUP_API_KEY = apiKey;
 
-      const args = [`--base-url=${baseUrl}`];
+      const args = { baseUrl };
       const options = parseArgs(args);
 
       expect(options).toEqual({
@@ -35,7 +35,7 @@ describe('parseArgs', () => {
     it('if api key set in env variable but also passed into args, should prefer args key', () => {
       process.env.LINKUP_API_KEY = apiKey;
 
-      const args = [`--api-key=${apiKey}`, `--base-url=${baseUrl}`];
+      const args = { apiKey, baseUrl };
       const options = parseArgs(args);
 
       expect(options).toEqual({
@@ -46,12 +46,12 @@ describe('parseArgs', () => {
       delete process.env.LINKUP_API_KEY;
     });
 
-    it('ignore all arguments not prefixed with --', () => {
-      const args = [
-        `--api-key=${apiKey}`,
-        `--base-url=${baseUrl}`,
-        'useless-field=useless-value',
-      ];
+    it('ignore all useless arguments', () => {
+      const args = {
+        apiKey,
+        baseUrl,
+        uselessField: 'useless-value',
+      };
       const options = parseArgs(args);
 
       expect(options).toEqual({
@@ -70,34 +70,24 @@ describe('parseArgs', () => {
     });
 
     it('should throw an error if api-key is not an uuid', () => {
-      const args = [`--api-key=${apiKey}`, `--base-url=${baseUrl}`];
+      const args = { apiKey, baseUrl };
 
       expect(() => parseArgs(args)).toThrow('API key must be an uuid.');
     });
     it('should throw an error if api-key is not provided', () => {
-      const args = ['--base-url=https://api.linkup.so/v1'];
+      const args = { baseUrl: 'https://api.linkup.so/v1' };
 
       expect(() => parseArgs(args)).toThrow(
         'Linkup API key not provided. Please either pass it as an argument --api-key=$KEY or set the LINKUP_API_KEY environment variable.',
       );
     });
     it('should throw an error if base-url is not an url', () => {
-      const args = [
-        '--api-key=242e0933-214d-4791-ac87-43bc99f9cc76',
-        `--base-url=${baseUrl}`,
-      ];
+      const args = {
+        apiKey: '242e0933-214d-4791-ac87-43bc99f9cc76',
+        baseUrl,
+      };
 
       expect(() => parseArgs(args)).toThrow('Base url must be an url.');
-    });
-    it('should throw an error if an invalid argument is provided', () => {
-      const args = [
-        '--invalid-arg=value',
-        `--api-key=${apiKey}`,
-        `--base-url=${baseUrl}`,
-      ];
-      expect(() => parseArgs(args)).toThrow(
-        'Invalid argument: invalid-arg. Accepted arguments are: api-key, base-url',
-      );
     });
   });
 });
@@ -145,16 +135,8 @@ describe('displayHelp', () => {
     exitSpy.mockRestore();
   });
 
-  it('should display help text and exit if --help is passed', () => {
-    expect(() => displayHelp(['--help'])).toThrow('process.exit() was called');
-    expect(logSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Usage: npx -y linkup-mcp [options]'),
-    );
-    expect(exitSpy).toHaveBeenCalledWith(0);
-  });
-
-  it('should display help text and exit if -h is passed', () => {
-    expect(() => displayHelp(['-h'])).toThrow('process.exit() was called');
+  it('should display help text and exit', () => {
+    expect(() => displayHelp()).toThrow('process.exit() was called');
     expect(logSpy).toHaveBeenCalledWith(
       expect.stringContaining('Usage: npx -y linkup-mcp [options]'),
     );
