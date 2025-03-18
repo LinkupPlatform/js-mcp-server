@@ -5,6 +5,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { LinkupClient } from 'linkup-sdk';
 import { z } from 'zod';
 import { type OptionValues, program } from 'commander';
+import { name, version, description } from '../package.json';
 
 type Args = {
   apiKey: string;
@@ -13,9 +14,9 @@ type Args = {
 };
 
 program
-  .name('linkup-mcp')
-  .description('Linkup Model Context Protocol server')
-  .version('1.0.0')
+  .name(name)
+  .description(description)
+  .version(version)
   .option(
     '--api-key <key>',
     'Your Linkup API key (required unless LINKUP_API_KEY env is set)',
@@ -58,19 +59,19 @@ export const parseArgs = (args: OptionValues): Args => {
 const instantiateTool = (server: McpServer, linkupClient: LinkupClient) => {
   server.tool(
     'search-web',
-    `A team member that will search the internet to answer your question. Ask him for all your questions that require browsing the web. 
-    Note that this agent is using a powerful language model and it can do the search and analyse the results. 
-    You should ask question in a way to let the language model to perform the best, i.e. provide as much context as possible and ask in a clear way.
-    Provide him as much context as possible, in particular if you need to search on a specific timeframe!
-    And don't hesitate to provide him with a complex search task, like finding a difference between two webpages.
-    Your request must be a real sentence, not a google search! Like "Find me this information (...)" rather than a few keywords.`,
+    'Performs a search for user input query using Linkup sdk then returns a string of the top search results. Should be used to search real-time data.',
     {
       query: z.string().describe('The search query to perform.'),
+      depth: z
+        .enum(['standard', 'deep'])
+        .describe(
+          'The depth of the search. Deep search is time consuming and expensive, use it wisely.',
+        ),
     },
-    async ({ query }) => {
+    async ({ query, depth }) => {
       const result = await linkupClient.search({
         query,
-        depth: 'standard',
+        depth,
         outputType: 'searchResults',
       });
 
@@ -108,8 +109,8 @@ export const main = async (): Promise<void> => {
   const options = parseArgs(args);
   const transport = new StdioServerTransport();
   const server = new McpServer({
-    name: 'linkup-mcp',
-    version: '1.0.0',
+    name,
+    version,
   });
   const linkupClient = new LinkupClient({
     apiKey: options.apiKey,

@@ -71,18 +71,18 @@ Clone the repository and install dependencies:
 ```bash
 git clone git@github.com:LinkupPlatform/linkup-js-mcp.git
 cd linkup-js-mcp
-pnpm install
+npm install
 ```
 
 # Available Scripts
 
-| Script            | Description                  |
-| ----------------- | ---------------------------- |
-| `pnpm build`      | Build the TypeScript project |
-| `pnpm lint`       | Run ESLint                   |
-| `pnpm format`     | Format code with Prettier    |
-| `pnpm test`       | Run tests                    |
-| `pnpm test:watch` | Run tests in watch mode      |
+| Script               | Description                  |
+| -------------------- | ---------------------------- |
+| `npm run build`      | Build the TypeScript project |
+| `npm run lint`       | Run ESLint                   |
+| `npm run format`     | Format code with Prettier    |
+| `npm run test`       | Run tests                    |
+| `npm run test:watch` | Run tests in watch mode      |
 
 # License
 
