@@ -1,7 +1,7 @@
 {
-  "name": "linkup-mcp",
+  "name": "linkup-mcp-server",
   "version": "1.0.0",
-  "description": "'Linkup Model Context Protocol server'",
+  "description": "'Linkup MCP server'",
   "types": "build/index.d.ts",
   "bin": "build/index.js",
   "scripts": {
