@@ -62,18 +62,12 @@ describe('parseArgs', () => {
   });
 
   describe('error cases', () => {
-    const apiKey = 'wrong-api-key';
     const baseUrl = 'wrong-url';
 
     beforeEach(() => {
       delete process.env.LINKUP_API_KEY;
     });
 
-    it('should throw an error if api-key is not an uuid', () => {
-      const args = { apiKey, baseUrl };
-
-      expect(() => parseArgs(args)).toThrow('API key must be an uuid.');
-    });
     it('should throw an error if api-key is not provided', () => {
       const args = { baseUrl: 'https://api.linkup.so/v1' };
 
@@ -81,13 +75,14 @@ describe('parseArgs', () => {
         'Linkup API key not provided. Please either pass it as an argument --api-key=$KEY or set the LINKUP_API_KEY environment variable.',
       );
     });
+
     it('should throw an error if base-url is not an url', () => {
       const args = {
         apiKey: '242e0933-214d-4791-ac87-43bc99f9cc76',
         baseUrl,
       };
 
-      expect(() => parseArgs(args)).toThrow('Base url must be an url.');
+      expect(() => parseArgs(args)).toThrow('Base url must be a valid url.');
     });
   });
 });
