@@ -2,19 +2,21 @@
 
 This package provides a [Model Context Protocol](https://modelcontextprotocol.com/) server for integrating Linkup's web search functionality with AI models that support function calling through MCP.
 
+You can check the NPM page [here](https://www.npmjs.com/package/linkup-mcp-server).
+
 ## Installation & Usage
 
 You can run the Linkup MCP server directly using npx:
 
 ```bash
-npx -y linkup-mcp --api-key=YOUR_LINKUP_API_KEY
+npx -y linkup-mcp-server --api-key=YOUR_LINKUP_API_KEY
 ```
 
 Alternatively, you can set your API key as an environment variable:
 
 ```bash
 export LINKUP_API_KEY=YOUR_LINKUP_API_KEY
-npx -y linkup-mcp
+npx -y linkup-mcp-server
 ```
 
 # Command Line Options
@@ -36,7 +38,7 @@ To ensure compatibility with Claude, we recommend that `npx` command be accessib
   "mcpServers": {
     "linkup": {
       "command": "npx",
-      "args": ["-y", "linkup-mcp"],
+      "args": ["-y", "linkup-mcp-server"],
       "env": {
         "LINKUP_API_KEY": "YOUR_LINKUP_API_KEY"
       }
@@ -52,7 +54,7 @@ or
   "mcpServers": {
     "linkup": {
       "command": "npx",
-      "args": ["-y", "linkup-mcp", "--api-key=YOUR_LINKUP_API_KEY"]
+      "args": ["-y", "linkup-mcp-server", "--api-key=YOUR_LINKUP_API_KEY"]
     }
   }
 }
@@ -69,8 +71,8 @@ or
 Clone the repository and install dependencies:
 
 ```bash
-git clone git@github.com:LinkupPlatform/linkup-js-mcp.git
-cd linkup-js-mcp
+git clone git@github.com:LinkupPlatform/js-mcp-server.git
+cd js-mcp-server
 npm install
 ```
 
