@@ -51,13 +51,13 @@ export const parseArgs = (args: OptionValues): Args => {
 const bindTool = (server: McpServer, linkupClient: LinkupClient) => {
   server.tool(
     'search-web',
-    'Performs a search for user input query using Linkup sdk then returns a string of the top search results. Should be used to search real-time data.',
+    'Performs an online search using Linkup search engine and retrieves the top results as a string. This function is useful for accessing real-time information, including news, articles, and other relevant web content.',
     {
       query: z.string().describe('The search query to perform.'),
       depth: z
         .enum(['standard', 'deep'])
         .describe(
-          'The depth of the search. Deep search is time consuming and expensive, use it wisely.',
+          "The search depth to perform. Use 'standard' for straightforward queries with likely direct answers (e.g., facts, definitions, simple explanations). Use 'deep' for: 1) complex queries requiring comprehensive analysis or information synthesis, 2) queries containing uncommon terms, specialized jargon, or abbreviations that may need additional context, or 3) questions likely requiring up-to-date or specialized web search results to answer effectively.",
         ),
     },
     async ({ query, depth }) =>
