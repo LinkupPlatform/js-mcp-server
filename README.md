@@ -1,10 +1,22 @@
-# Linkup Model Context Protocol
+# 🌟 Linkup JS MCP Server
 
-This package provides a [Model Context Protocol](https://modelcontextprotocol.com/) server for integrating Linkup's web search functionality with AI models that support function calling through MCP.
+A Model Context Protocol (MCP) server that provides web search capabilities through Linkup's advanced search API. This server enables AI assistants and development tools to perform intelligent web searches with natural language queries.
+
+## ✨ Why Linkup?
+
+- 🔍 **Advanced Web Search**: Leverage Linkup's AI-powered search engine for high-quality, relevant results
+- 💬 **Natural Language Queries**: Ask questions in plain English or your preferred language - no need for keyword optimization
+- 🚀 **Real-time Information**: Access up-to-date web content and current information
+- 📚 **Comprehensive Results**: Get detailed search results with source citations
+- 🔧 **Easy Integration**: Works with any MCP-compatible client
+
+## 🚀 Installation
+
+The Linkup MCP server can be used with any MCP-compatible client. 
+
+For an integration with Claude Desktop or with Cursor, please follow instruction [here](https://docs.linkup.so/pages/integrations/mcp/mcp).
 
 You can check the NPM page [here](https://www.npmjs.com/package/linkup-mcp-server).
-
-## Installation & Usage
 
 You can run the Linkup MCP server directly using npx:
 
@@ -19,7 +31,7 @@ export LINKUP_API_KEY=YOUR_LINKUP_API_KEY
 npx -y linkup-mcp-server
 ```
 
-# Command Line Options
+**Command Line Options**
 
 | Option       | Description                                                       |
 | ------------ | ----------------------------------------------------------------- |
@@ -27,46 +39,22 @@ npx -y linkup-mcp-server
 | `--base-url` | Custom API base URL (default: `https://api.linkup.so/v1`)         |
 | `--help, -h` | Show help text                                                    |
 
-# Usage with Claude
+Consult your MCP client's documentation for specific configuration instructions.
 
-Add the following to your `claude_desktop_config.json`. See the [MCP documentation](https://modelcontextprotocol.io/quickstart/user) for more details.
+## 💬 Example Queries
 
-To ensure compatibility with Claude, we recommend that `npx` command be accessible within the same environment. A common location for this is `/usr/local/bin/node` (on mac)
+The Linkup MCP server excels at answering complex questions and finding specific information:
 
-```json
-{
-  "mcpServers": {
-    "linkup": {
-      "command": "npx",
-      "args": ["-y", "linkup-mcp-server"],
-      "env": {
-        "LINKUP_API_KEY": "YOUR_LINKUP_API_KEY"
-      }
-    }
-  }
-}
-```
+- "What are the latest developments in quantum computing?"
+- "How does the EU AI Act affect startups?"
+- "Find recent research on sustainable aviation fuel"
+- "What are the current best practices for MCP server development?"
 
-or
+## 🤝 Contributing
 
-```json
-{
-  "mcpServers": {
-    "linkup": {
-      "command": "npx",
-      "args": ["-y", "linkup-mcp-server", "--api-key=YOUR_LINKUP_API_KEY"]
-    }
-  }
-}
-```
+Pull requests are welcome! Feel free to open an issue first to discuss what you’d like to see improved.
 
-## Available Tools
-
-| Tool         | Description                             |
-| ------------ | --------------------------------------- |
-| `search-web` | Perform a web search query using Linkup |
-
-## Development
+### Development
 
 Clone the repository and install dependencies:
 
@@ -76,7 +64,7 @@ cd js-mcp-server
 npm install
 ```
 
-# Available Scripts
+### Available Scripts
 
 | Script               | Description                  |
 | -------------------- | ---------------------------- |
@@ -86,6 +74,18 @@ npm install
 | `npm run test`       | Run tests                    |
 | `npm run test:watch` | Run tests in watch mode      |
 
-# License
+## 📚 Resources
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- [Linkup Documentation](https://docs.linkup.so)
+- [MCP Protocol Specification](https://modelcontextprotocol.io)
+- [Linkup API Reference](https://docs.linkup.so/api-reference)
+
+## 📣 Community & Support
+
+* Email: [support@linkup.so](mailto:support@linkup.so)
+* Discord: [Join our community](https://discord.com/invite/9q9mCYJa86)
+* X / Twitter: [@Linkup_platform](https://x.com/Linkup_platform)
+
+## 📄 License
+
+This project is licensed under the MIT License - Innovate freely! 🚀
