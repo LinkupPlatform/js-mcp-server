@@ -1,6 +1,6 @@
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { LinkupClient } from 'linkup-sdk';
-import { main, parseArgs, displayHelp } from '../index';
+import { displayHelp, main, parseArgs } from '../index';
 
 describe('parseArgs', () => {
   describe('success cases', () => {
