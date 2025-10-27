@@ -1,5 +1,11 @@
 # 🌟 Linkup JS MCP Server
 
+> ⚠️ **DEPRECATED**: This package is no longer maintained.
+>
+> Please use the TypeScript/Node.js version instead: **https://github.com/LinkupPlatform/linkup-mcp-server**
+>
+> The TypeScript version is actively maintained, has better performance, and supports all the latest features.
+
 A Model Context Protocol (MCP) server that provides web search capabilities through Linkup's advanced search API. This server enables AI assistants and development tools to perform intelligent web searches with natural language queries.
 
 ## ✨ Why Linkup?
@@ -12,7 +18,7 @@ A Model Context Protocol (MCP) server that provides web search capabilities thro
 
 ## 🚀 Installation
 
-The Linkup MCP server can be used with any MCP-compatible client. 
+The Linkup MCP server can be used with any MCP-compatible client.
 
 For an integration with Claude Desktop or with Cursor, please follow instruction [here](https://docs.linkup.so/pages/integrations/mcp/mcp).
 
